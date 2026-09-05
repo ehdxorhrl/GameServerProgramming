@@ -183,28 +183,6 @@ public:
 HANDLE h_iocp;
 concurrency::concurrent_unordered_map<long long, shared_ptr<SESSION>> clients;
 
-// NPC 구현 첫번째 방법
-//  NPC클래스를 별도 제작, NPC컨테이너를 따로 생성한다.
-//  장점 : 깔끔하다, 군더더기가 없다.
-//  단점 : 플레이어와 NPC가 따로논다. 똑같은 역할을 수행하는 함수를 여러개씩 중복 작성해야 한다.
-//         예) bool can_see(int from, int to)
-//                 => bool can_see_p2p()
-//				    bool can_see_p2n()
-//					bool can_see_n2n()
-
-// NPC 구현 두번째 방법  <===== 실습에서 사용할 방법.
-//   clients 컨테이너에 NPC도 추가한다.
-//   장점 : 플레이어와 NPC를 동일하게 취급할 수 있어서, 프로그래밍 작성 부하가 줄어든다.
-//   단점 : 사용하지 않는 멤버들로 인한 메모리 낭비.
-
-// NPC 구현 세번째 방법  (실제로 많이 사용되는 방법)
-//   클래스 상속기능을 사용한다.
-//     SESSION은 NPC클래스를 상속받아서 네트워크 관련 기능을 추가한 형태로 정의한다.
-//       clients컨테이너를 objects컨테이너로 변경하고, 컨테이너는 NPC의 pointer를 저장한다.
-//      장점 : 메모리 낭비가 없다, 함수의 중복작성이 필요없다.
-//          (포인터로 관리되므로 player id의 중복사용 방지를 구현하기 쉬워진다 => Data Race 방지를 위한 추가 구현이 필요)
-//      단점 : 포인터가 사용되고, reinterpret_cast가 필요하다. (별로 단점이 안니다).
-
 SOCKET g_s_socket, g_c_socket;
 OVER_EXP g_a_over;
 
